@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JS ORGANIC</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial, sans-serif}
+    html,body{height:100%}
+    body{background:#f8f8f8;color:#333;line-height:1.4}
+    a {color:inherit}
+
+    /* HERO */
+    .hero{
+      min-height:90vh;
+      background:url("https://i.ibb.co/27ymGjnm/HALDI.jpg") center/cover no-repeat;
+      display:flex;align-items:center;justify-content:center;text-align:center;color:white;padding:20px;
+    }
+    .hero-content{
+      background:rgba(0,0,0,0.45);
+      padding:28px;border-radius:10px;max-width:900px;width:100%;
+    }
+    .hero h1{font-size:clamp(28px,4vw,48px);margin-bottom:10px}
+    .hero p{font-size:clamp(14px,1.8vw,18px);margin-bottom:18px}
+    .btn{background:#ff9800;color:white;padding:12px 22px;border:none;border-radius:6px;font-size:16px;cursor:pointer;text-decoration:none;display:inline-block}
+
+    /* PRODUCTS */
+    .products{padding:36px 18px}
+    .products h2{text-align:center;margin-bottom:18px}
+    .carousel{display:flex;gap:18px;overflow-x:auto;padding:6px 6px 12px}
+    .card{min-width:220px;background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:12px;text-align:center}
+    .card img{width:100%;border-radius:8px;height:160px;object-fit:cover}
+    .card h3{margin:10px 0;font-size:16px}
+    .price{color:#2e7d32;font-weight:700;margin-bottom:10px}
+    .add-btn{background:#4caf50;color:white;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+
+    /* ORDER FORM */
+    .order{padding:30px 18px;background:white;margin:18px;border-radius:8px;max-width:920px;margin-left:auto;margin-right:auto}
+    .order h2{text-align:center;margin-bottom:14px}
+    form{max-width:520px;margin:auto;display:flex;flex-direction:column;gap:10px}
+    label{font-size:14px}
+    input,textarea{padding:10px;border:1px solid #ccc;border-radius:6px;font-size:15px;width:100%}
+    textarea{min-height:100px;resize:vertical}
+    .submit-btn{background:#ff9800;border:none;color:white;padding:12px;border-radius:6px;font-size:16px;cursor:pointer}
+
+    /* WHATSAPP */
+    .whatsapp{position:fixed;bottom:20px;right:20px;background:#25d366;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 4px 10px rgba(0,0,0,0.25)}
+
+    /* small toast */
+    .toast{position:fixed;bottom:100px;right:20px;background:rgba(0,0,0,0.8);color:#fff;padding:10px 12px;border-radius:6px;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s}
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    /* focus states */
+    :focus{outline:3px solid rgba(255,152,0,0.25);outline-offset:3px}
+
+    /* responsive */
+    @media(min-width:700px){
+      .carousel{padding:12px;gap:20px}
+      .card img{height:180px}
+      form{gap:14px}
+    }
+
+  </style>
+</head>
+<body>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero section">
+      <div class="hero-content">
+        <h1>JS ORGANIC</h1>
+        <p>100% organic, chemical-free turmeric powder — no added food colors.</p>
+        <a class="btn" href="#products">Shop now</a>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products" id="products" aria-labelledby="products-heading">
+      <h2 id="products-heading">Our Products</h2>
+
+      <div class="carousel" role="list">
+        <article class="card" role="listitem">
+          <img src="https://i.ibb.co/27ymGjnm/HALDI.jpg" alt="Pack of Organic Turmeric Powder" loading="lazy">
+          <h3>Organic Turmeric Powder</h3>
+          <p class="price">₹200</p>
+          <button class="add-btn" type="button" onclick="addToCart('Organic Turmeric Powder - ₹200')">Add to cart</button>
+        </article>
+
+        <article class="card" role="listitem">
+          <img src="https://i.ibb.co/27ymGjnm/HALDI.jpg" alt="Jar of Premium Turmeric Powder" loading="lazy">
+          <h3>Premium Turmeric Powder</h3>
+          <p class="price">₹350</p>
+          <button class="add-btn" type="button" onclick="addToCart('Premium Turmeric Powder - ₹350')">Add to cart</button>
+        </article>
+
+        <article class="card" role="listitem">
+          <img src="https://i.ibb.co/27ymGjnm/HALDI.jpg" alt="Bag of Village Haldi Powder" loading="lazy">
+          <h3>Village Haldi Powder</h3>
+          <p class="price">₹500</p>
+          <button class="add-btn" type="button" onclick="addToCart('Village Haldi Powder - ₹500')">Add to cart</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ORDER FORM -->
+    <section class="order" aria-labelledby="order-heading">
+      <h2 id="order-heading">Place your order</h2>
+
+      <form id="orderForm" onsubmit="sendOrder(event)" novalidate>
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" required aria-required="true" placeholder="Full name">
+        </div>
+
+        <div>
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" required placeholder="+91 90000 00000" pattern="^\+?\d{7,15}$" aria-describedby="phone-help">
+          <small id="phone-help">Include country code (e.g. +91 for India)</small>
+        </div>
+
+        <div>
+          <label for="cartItems">Selected items</label>
+          <textarea id="cartItems" name="cartItems" placeholder="No items selected" readonly aria-readonly="true"></textarea>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:6px">
+          <button class="submit-btn" type="submit">Place order (email)</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- WHATSAPP BUTTON -->
+  <!-- NOTE: Replace the phone number below with your full international number (e.g. 919012345678) -->
+  <a id="whatsappLink" class="whatsapp" href="https://wa.me/8908654900" aria-label="Contact on WhatsApp" target="_blank" rel="noopener noreferrer">💬</a>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function(){
+      const cart = [];
+      const cartEl = document.getElementById('cartItems');
+      const toast = document.getElementById('toast');
+
+      function showToast(msg, timeout = 2200){
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(()=> toast.classList.remove('show'), timeout);
+      }
+
+      window.addToCart = function(item){
+        cart.push(item);
+        cartEl.value = cart.join('\n');
+        showToast('Added to cart');
+      };
+
+      // Helper to safely build mailto with proper encoding
+      function buildMailto(to, subject, body){
+        return 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      }
+
+      window.sendOrder = function(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const items = cart.length ? cart.join(', ') : 'No items selected';
+
+        if(!name || !phone){
+          showToast('Please provide your name and phone number');
+          return;
+        }
+
+        // Basic phone pattern check (international digits only)
+        const phonePattern = /^\+?\d{7,15}$/;
+        if(!phonePattern.test(phone)){
+          showToast('Please enter a valid phone number with country code');
+          return;
+        }
+
+        const bodyLines = [
+          'Customer Name: ' + name,
+          'Phone: ' + phone,
+          'Items: ' + items
+        ];
+        const body = bodyLines.join('\\n');
+
+        // Open default mail client with encoded body
+        // Replace the email address below if you want a different recipient
+        const mailto = buildMailto('jayadevsenapati5@gmail.com', 'New Order from JS ORGANIC', body);
+        window.location.href = mailto;
+      };
+
+      // Expose small utilities for debug from console (optional)
+      window.__JS_ORG = { cart };
+
+    })();
+  </script>
+</body>
+</html>
